@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "@rocketseat/eslint-config/react",
+
+    // Essas 3 configs são para arrumar um bug do eslint que diz unused vars em Enums 
+    // No futuro não vai ser preciso usar
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "react/self-closing-comp": [
+      "warn",
+      {
+        "component": true,
+        "html": false
+      }
+    ]
+  }
+}
