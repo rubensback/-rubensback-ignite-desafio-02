@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { NavLink } from 'react-router-dom'
 
 export const HeaderContainer = styled.div`
@@ -29,9 +29,36 @@ export const Address = styled.div`
   }
 `
 
-export const Cart = styled(NavLink)`
+interface CartProps {
+  qty: number
+}
+
+export const Cart = styled(NavLink)<CartProps>`
   color: ${(props) => props.theme['yellow-dark']};
   background-color: ${(props) => props.theme['yellow-light']};
   padding: 0.5rem;
   border-radius: 8px;
+  position: relative;
+
+  ${(props) =>
+    props.qty &&
+    css`
+      &::after {
+        height: 1.25rem;
+        width: 1.25rem;
+        position: absolute;
+        top: -0.5rem;
+        right: -0.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+        font-weight: bold;
+        line-height: 1.2rem;
+        content: '${props.qty}';
+        color: ${props.theme.white};
+        background-color: ${props.theme['yellow-dark']};
+      }
+    `}
 `
