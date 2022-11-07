@@ -18,13 +18,14 @@ import { CardHeader } from './components/CardHeader'
 import { Bank, CreditCard, Money } from 'phosphor-react'
 import { SelectedCoffee } from '../../components/SelectedCoffee'
 import { CartContext } from '../../contexts/CartContext'
+import { AddressContext } from '../../contexts/AddressContext'
 
 const checkoutSchema = zod.object({
   cep: zod
     .string()
     .regex(/^[0-9]{5}-[0-9]{3}$/, 'Insira um código postal valido'),
   street: zod.string(),
-  number: zod.number(),
+  number: zod.string(),
   complement: zod.string().optional(),
   neighborhood: zod.string(),
   city: zod.string(),
@@ -55,20 +56,26 @@ const deliveryValue = 3.5
 
 export const Checkout = () => {
   const { coffees } = useContext(CartContext)
+  const { address, saveAddress } = useContext(AddressContext)
   const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
     null,
   )
   const methods = useForm<checkoutFormData>({
     resolver: zodResolver(checkoutSchema),
+    defaultValues: address,
   })
   const {
     handleSubmit,
     formState: { errors },
   } = methods
 
-  const handleCheckout = useCallback((formData: checkoutFormData) => {
-    console.log('formData', formData)
-  }, [])
+  const handleCheckout = useCallback(
+    (formData: checkoutFormData) => {
+      console.log('formData', formData)
+      saveAddress(formData)
+    },
+    [saveAddress],
+  )
 
   const { subTotal, total } = useMemo(() => {
     const subTotal = coffees.reduce(

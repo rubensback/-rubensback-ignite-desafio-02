@@ -20,7 +20,6 @@ export const cartReducer = (state: CartState, action: ActionsProps) => {
       return { ...state, coffees: [...state.coffees, action.payload.newCoffee] }
 
     case ActionTypes.INCREASE_CURRENT_COFFEE: {
-      console.log('increase')
       const currentCoffeeIndex = state.coffees.findIndex(
         (coffee) => coffee.id === action.payload.id,
       )

@@ -1,4 +1,3 @@
-import { MapPin } from 'phosphor-react'
 import { useFormContext } from 'react-hook-form'
 import { Input } from '../../components/Input'
 import { CardHeader } from '../../pages/Checkout/components/CardHeader'
@@ -30,6 +29,7 @@ export const Form = () => {
         <Input
           styles={{ width: '35%' }}
           placeholder="Número"
+          type={'number'}
           {...register('number')}
         />
         <Input
