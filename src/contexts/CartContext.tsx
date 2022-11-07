@@ -1,7 +1,9 @@
 import { createContext, ReactNode, useCallback, useReducer } from 'react'
 import {
   addNewCoffeeAction,
+  decreaseCurrentCoffeeAction,
   increaseCurrentCoffeeAction,
+  removeCoffeeAction,
 } from '../reducers/cart/actions'
 import { cartReducer, Coffee } from '../reducers/cart/reducer'
 
@@ -9,6 +11,8 @@ interface CartContextType {
   coffees: Coffee[]
   addCoffeeToCart: (data: Coffee) => void
   increaseCurrentCoffee: (id: number, qty: number) => void
+  decreaseCurrentCoffee: (id: number, qty: number) => void
+  removeCoffee: (id: number) => void
 }
 
 export const CartContext = createContext({} as CartContextType)
@@ -28,6 +32,10 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
     dispatch(increaseCurrentCoffeeAction(id, qty))
   }, [])
 
+  const decreaseCurrentCoffee = useCallback((id: number, qty: number) => {
+    dispatch(decreaseCurrentCoffeeAction(id, qty))
+  }, [])
+
   const addCoffeeToCart = useCallback(
     (newCoffee: Coffee) => {
       const coffeAlreadyAdded = coffees.find(({ id }) => id === newCoffee.id)
@@ -37,7 +45,10 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
     [coffees, increaseCurrentCoffee],
   )
 
-  console.log('coffees', coffees)
+  const removeCoffee = useCallback(
+    (coffeeId: number) => dispatch(removeCoffeeAction(coffeeId)),
+    [],
+  )
 
   return (
     <CartContext.Provider
@@ -45,6 +56,8 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
         coffees,
         addCoffeeToCart,
         increaseCurrentCoffee,
+        removeCoffee,
+        decreaseCurrentCoffee,
       }}
     >
       {children}
