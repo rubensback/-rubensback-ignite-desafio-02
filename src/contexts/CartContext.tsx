@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useCallback, useReducer } from 'react'
 import {
   addNewCoffeeAction,
+  clearAllCoffeesAction,
   decreaseCurrentCoffeeAction,
   increaseCurrentCoffeeAction,
   removeCoffeeAction,
@@ -13,6 +14,7 @@ interface CartContextType {
   increaseCurrentCoffee: (id: number, qty: number) => void
   decreaseCurrentCoffee: (id: number, qty: number) => void
   removeCoffee: (id: number) => void
+  clearAllCoffees: () => void
 }
 
 export const CartContext = createContext({} as CartContextType)
@@ -50,6 +52,11 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
     [],
   )
 
+  const clearAllCoffees = useCallback(
+    () => dispatch(clearAllCoffeesAction()),
+    [],
+  )
+
   return (
     <CartContext.Provider
       value={{
@@ -58,6 +65,7 @@ export const CartContextProvider = ({ children }: CartContextProviderProps) => {
         increaseCurrentCoffee,
         removeCoffee,
         decreaseCurrentCoffee,
+        clearAllCoffees,
       }}
     >
       {children}

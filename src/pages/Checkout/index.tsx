@@ -13,12 +13,20 @@ import {
   Values,
 } from './styles'
 import { Form } from '../../components/Form'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  ReactElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { CardHeader } from './components/CardHeader'
 import { Bank, CreditCard, Money } from 'phosphor-react'
 import { SelectedCoffee } from '../../components/SelectedCoffee'
 import { CartContext } from '../../contexts/CartContext'
 import { AddressContext } from '../../contexts/AddressContext'
+import { useNavigate } from 'react-router-dom'
 
 const checkoutSchema = zod.object({
   cep: zod
@@ -52,12 +60,19 @@ const paymentTypes = [
   },
 ]
 
+interface PaymentType {
+  icon: ReactElement
+  name: string
+  id: number
+}
+
 const deliveryValue = 3.5
 
 export const Checkout = () => {
-  const { coffees } = useContext(CartContext)
+  const { coffees, clearAllCoffees } = useContext(CartContext)
   const { address, saveAddress } = useContext(AddressContext)
-  const [selectedPaymentId, setSelectedPaymentId] = useState<number | null>(
+  const navigate = useNavigate()
+  const [selectedPayment, setSelectedPayment] = useState<PaymentType | null>(
     null,
   )
   const methods = useForm<checkoutFormData>({
@@ -71,10 +86,18 @@ export const Checkout = () => {
 
   const handleCheckout = useCallback(
     (formData: checkoutFormData) => {
-      console.log('formData', formData)
+      if (!selectedPayment) {
+        alert('Select payment!')
+        return
+      }
       saveAddress(formData)
+      clearAllCoffees()
+      navigate('/success', {
+        state: { selectedPayment: selectedPayment?.name },
+        replace: true,
+      })
     },
-    [saveAddress],
+    [saveAddress, navigate, clearAllCoffees, selectedPayment],
   )
 
   const { subTotal, total } = useMemo(() => {
@@ -109,8 +132,8 @@ export const Checkout = () => {
             {paymentTypes.map((item) => (
               <PaymentType
                 key={item.id}
-                selected={item.id === selectedPaymentId}
-                onClick={() => setSelectedPaymentId(item.id)}
+                selected={item.id === selectedPayment?.id}
+                onClick={() => setSelectedPayment(item)}
               >
                 {item.icon}
                 <p>{item.name}</p>

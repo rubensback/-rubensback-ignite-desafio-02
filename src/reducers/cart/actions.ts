@@ -5,6 +5,7 @@ export enum ActionTypes {
   INCREASE_CURRENT_COFFEE = 'INCREASE_CURRENT_COFFEE',
   DECREASE_CURRENT_COFFEE = 'DECREASE_CURRENT_COFFEE',
   REMOVE_COFFEE = 'REMOVE_COFFEE',
+  CLEAR_ALL_COFFEES = 'CLEAR_ALL_COFFEES',
 }
 
 interface addNewCoffeeActionProps {
@@ -27,11 +28,16 @@ interface removeCoffeeProps {
   payload: { id: number }
 }
 
+interface clearAllCoffeesProps {
+  type: ActionTypes.CLEAR_ALL_COFFEES
+}
+
 export type ActionsProps =
   | addNewCoffeeActionProps
   | increaseCurrentCoffeeActionProps
   | decreaseCurrentCoffeeActionProps
   | removeCoffeeProps
+  | clearAllCoffeesProps
 
 export const addNewCoffeeAction = (
   newCoffee: Coffee,
@@ -67,4 +73,8 @@ export const decreaseCurrentCoffeeAction = (
 export const removeCoffeeAction = (id: number): removeCoffeeProps => ({
   type: ActionTypes.REMOVE_COFFEE,
   payload: { id },
+})
+
+export const clearAllCoffeesAction = (): clearAllCoffeesProps => ({
+  type: ActionTypes.CLEAR_ALL_COFFEES,
 })

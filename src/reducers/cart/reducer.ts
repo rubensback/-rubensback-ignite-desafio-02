@@ -56,6 +56,9 @@ export const cartReducer = (state: CartState, action: ActionsProps) => {
       }
     }
 
+    case ActionTypes.CLEAR_ALL_COFFEES:
+      return { ...state, coffees: [] }
+
     default:
       return state
   }
